@@ -1,0 +1,96 @@
+# MailChimp
+Send newsletter to all your subscribers
+
+# Mail-Chimp
+
+
+# NOTES:
+
+1. You have been working on a project and already have a populated subscribers list (otherwise this program is completely useless)
+
+2. This program is suited for goaffpro but can be modified for any other service by modifying "insert_ambassador_into_db.py"
+
+
+# INSTALL:
+
+1. Create a database to transfer that list to the database. Create tables:
+
+	Table name: subscribers
+	Fields:
+		"id" -> Primary Key
+		"name" -> string
+		"email" -> string
+		"subscribed" -> boolean
+		"hashed" -> string, md5
+		"newsletter_number" -> string, 1_2
+		"time_stamp" -> string, date the email was opened
+		"OS" -> string, subscribers OS
+		"browser" -> string, subscribers browser and version
+		"country" -> string, subscribers country
+		"city" -> string, subscribers city
+		"coupon" -> string, special coupon discount
+
+	Table name: newsletters_sent
+	Fields:
+		"ambassadors_total" -> string
+		"newsletter_number" -> string
+		"date" -> string
+
+	Table name: opened_emails
+	Fields:
+		"hashed" -> string
+		"newsletter_number" -> string
+		"time_stamp" -> string
+		"OS" -> string
+		"browser" -> string
+		"country" -> string
+		"city" -> string
+
+	The field "newsletter_number" consists of (1_2), being "1" the newsletter number edition and "2" the subdivision within the newsletter itself.
+	A newsletter has 3 subdivisions all of then which are trackable:
+		Beginning (1), the subscriber scrolls up to the first image of the newsletter
+		Middle (2), the subscriber scrolls up to the second image of the newsletter
+		End (3), the subscriber scrolls up to the third image of the newsletter
+
+2. Change the .htaccess file from your website, all files want to stay hidden. Add:
+	Addhandler application/x-httpd-lsphp .html
+	IndexIgnore *
+
+3. Modify the script "insert_ambassador_into_db.py" with your own credentials. Use any service you like, I used goaffpro but modify accordingly to fit your needs.
+	Execute the script to automatically transfer the subscribers from your own service into your database.
+	This script will fetch the subscribers list from your service (goaffpro or similar), take each individual subscriber,
+	hash their email address and call "update_db.php" which will add a new entry into the Subscribers table of the database,
+	it will then iterate over the entire list of subscribers.
+
+4. Upload images:
+	-Images to be displayed on the newsletter to your website.
+		The images file name should be easy to remember and have the same schema as the "newsletter_number" field,
+		for example 1_3.png, as they will be stored in the database for future reference and later analysis.
+	-1px transparent image, you will call this image from a .php file so you know whether or not the subscriber opened the email and accepted its media content. 
+
+5. Upload files:
+	"update_db.php" upload into your website and copy the full path to that file: "www.example.com/hidden_content/update_db.php" and paste it into "insert_subscriber_into_db.py".
+	"unsubscribe_user.php", self explanatory.
+	"resubscribe.php". A subscriber unsubscribe by mistake or regrets the dessition. We have a botton after to display after the
+		"You have been successfully unsubscribed" page so the chances of keeping the subscriber are higher.
+	"request_image.php". Instead of displaying a normal picture, we ask for this file to handle us the picture instead and thanks to it we can track how far down the line
+		the subscriber is at.
+	"redirect_to_website.php". When some subscriber is interested and clicks a link of the newsletter we track it thanks to this file.
+	"newsletter_tracker.php". Fetches all possible data about the user.
+	"give_db_server.php" will give us the list [id, name, email, subscribed, hashed]. That way we know who to send the emails to.
+		Remember that we don't want to send an email to an unsubscribed user.
+	"emails_sent_server.php". Track the sent newsletters so you don't end up seding the same newsletter twice.
+	"delete_repeated_emails.php" deletes subscribers with the same email.
+	"request_image.php" all images are requested through this file. Tracks the subscriber.
+
+
+# START
+
+1. Execute: "insert_subscriber_into_db.py" to populate the database.
+
+2. Create your newsletter and name it: 1_newsletter.html "1" is the first edition of your many-more-to-come newsletters.
+	Or use the template with the keywords already builtin and write what ever your company wants inside the html tags "<p>".
+
+3. Change the subject of the email to be sent in "create_send_newsletter.py" -> def main() -> subject.
+
+4. Place "create_send_newsletter.py" in the same folder as 1_newsletter.html to create and send the newsletters to all your subscribers.
