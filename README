@@ -94,3 +94,6 @@ Send newsletter to all your subscriber's
 3. Change the subject of the email to be sent in "create_send_newsletter.py" -> def main() -> subject.
 
 4. Place "create_send_newsletter.py" in the same folder as 1_newsletter.html to create and send the newsletters to all your subscribers.
+
+5. Execute "create_send_newsletter.py"
+
