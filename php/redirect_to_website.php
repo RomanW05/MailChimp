@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 $date = date("Y-m-d-h-i");
 $hashed = mysqli_real_escape_string($conn, $_GET['hashed']);
 $newsletter = mysqli_real_escape_string($conn, $_GET['newsletter']);
-$sql = "INSERT INTO click_banner (hashed, newsletter, time_stamp) VALUES('$hashed', '$newsletter', '$date')";
+$sql = "INSERT INTO click_banner (hashed, newsletter_number, time_stamp) VALUES('$hashed', '$newsletter', '$date')";
 $result = $conn->query($sql);
 $conn->close();
 
