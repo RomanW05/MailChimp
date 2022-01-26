@@ -45,6 +45,12 @@ Send newsletter to all your subscriber's
 		"browser" -> string
 		"country" -> string
 		"city" -> string
+		
+	Table name: unsubscribed_time
+	Fields:
+		"hashed" -> string
+		"email" -> string
+		"time_stamp" -> string
 
 	The field "newsletter_number" consists of (1_2), being "1" the newsletter number edition and "2" the subdivision within the newsletter itself.
 	A newsletter has 3 subdivisions all of then which are trackable:
@@ -56,19 +62,12 @@ Send newsletter to all your subscriber's
 	Addhandler application/x-httpd-lsphp .html
 	IndexIgnore *
 
-3. Modify the script "insert_ambassador_into_db.py" with your own credentials. Use any service you like, I used goaffpro but modify accordingly to fit your needs.
-	Execute the script to automatically transfer the subscribers from your own service into your database.
-	This script will fetch the subscribers list from your service (goaffpro or similar), take each individual subscriber,
-	hash their email address and call "update_db.php" which will add a new entry into the Subscribers table of the database,
-	it will then iterate over the entire list of subscribers.
-
-4. Upload images:
+3. Upload images:
 	-Images to be displayed on the newsletter to your website.
 		The images file name should be easy to remember and have the same schema as the "newsletter_number" field,
-		for example 1_3.png, as they will be stored in the database for future reference and later analysis.
-	-1px transparent image, you will call this image from a .php file so you know whether or not the subscriber opened the email and accepted its media content. 
+		for example 1_3.png, as they will be stored in the database for future reference and later analysis. 
 
-5. Upload files:
+4. Upload files:
 	"update_db.php" upload into your website and copy the full path to that file: "www.example.com/hidden_content/update_db.php" and paste it into "insert_subscriber_into_db.py".
 	"unsubscribe_user.php", self explanatory.
 	"resubscribe.php". A subscriber unsubscribe by mistake or regrets the dessition. We have a botton after to display after the
@@ -83,7 +82,27 @@ Send newsletter to all your subscriber's
 	"delete_repeated_emails.php" deletes subscribers with the same email.
 	"request_image.php" all images are requested through this file. Tracks the subscriber.
 
-
+5. Modify files:
+	-"insert_ambassador_into_db.py" with your own credentials. Use any service you like, I used goaffpro but modify accordingly to fit your needs.
+	Execute the script to automatically transfer the subscribers from your own service into your database.
+	This script will fetch the subscribers list from your service (goaffpro or similar), take each individual subscriber,
+	hash their email address and call "update_db.php" which will add a new entry into the Subscribers table of the database,
+	it will then iterate over the entire list of subscribers.
+	-"resubscribe.php" -> echo "You have been resubscribe to YOUR_COMPANY..." with the name of your company
+	-"unsubscribe_user.php" -> echo "You have been successfully unsubscribed from YOUR_COMPANY..."  with the name of your company
+	-"unsubscribe_user.php" -> echo "If you clicked 'unsubscribe' by mistake and want to be part of our family
+		click <a href='https://www.example.com/hidden_files/resubscribe.php"  with the path of your uploaded file
+	-"give_db_server.php" -> $passwordy. Match your 
+	-Set your own credentials for:
+		-"delete_repeated_emails.php"
+		-"emails_sent_server.php"
+		-"redirect_to_website.php"
+		-"request_image.php"
+		-"resubscribe.php"
+		-"unsubscribe_user.php"
+	-"update_database.php" -> $passwordy. Matching that password from "create_send_newsletter.py"		
+	
+	
 # START
 
 1. Execute: "insert_subscriber_into_db.py" to populate the database.
